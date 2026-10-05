@@ -73,5 +73,5 @@ const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
 root.listen(PORT, HOST, () => {
   console.log(`FinTech API en http://${HOST}:${PORT} — modo inicial: ${mode.toUpperCase()}`);
-  console.log(`Panel de cambio de modo (solo local): http://localhost:${PORT}/__panel`);
+  console.log(`Panel de cambio de modo (solo local): http://localhost:${PORT}/`);
 });
