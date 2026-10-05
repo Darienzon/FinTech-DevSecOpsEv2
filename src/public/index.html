@@ -94,6 +94,16 @@
     .secondary { border: 1px solid var(--line); background: #fff; color: #536177; }
     .secondary:hover { background: #f7f8fb; }
     .hint { color: #97a1af; font-size: 9px; line-height: 1.5; }
+    .contacts { margin-bottom: 14px; }
+    .contacts-label { margin-bottom: 8px; color: #526177; font-size: 10px; font-weight: 650; }
+    .contact-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .contact { display: flex; align-items: center; gap: 8px; padding: 5px 12px 5px 5px; border: 1px solid var(--line); border-radius: 99px; background: #fff; color: var(--ink); text-align: left; }
+    .contact:hover { border-color: #cbd4e2; background: #f7f8fb; }
+    .contact:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+    .contact.selected { border-color: var(--blue); background: #eef2ff; }
+    .contact-avatar { display: grid; width: 26px; height: 26px; flex: 0 0 auto; place-items: center; border-radius: 50%; background: #e8edff; color: var(--blue); font-size: 9px; font-weight: 750; }
+    .contact-name { display: block; font-size: 11px; font-weight: 650; line-height: 1.2; }
+    .contact-id { display: block; color: #97a1af; font-size: 9px; line-height: 1.3; }
     .output { display: none; max-height: 190px; overflow: auto; margin-top: 12px; padding: 11px; border: 1px solid #e7ebf2; border-radius: 8px; background: #f7f9fc; color: #46546a; font: 10px/1.55 ui-monospace, SFMono-Regular, Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
     .output.show { display: block; }
     .output.error { border-color: #f2d4d7; background: #fff8f8; color: #a63642; }
@@ -210,6 +220,10 @@
           <article class="panel" id="transferencia">
             <div class="panel-head"><div><h2 class="panel-title">Nueva transferencia</h2><p class="panel-desc">Envía fondos a otra cuenta demo.</p></div><span class="tag">A04 · API</span></div>
             <form id="transfer-form">
+              <div class="contacts">
+                <div class="contacts-label" id="contacts-label">Contactos guardados</div>
+                <div class="contact-list" id="contact-list" role="group" aria-labelledby="contacts-label"></div>
+              </div>
               <div class="form-grid">
                 <div class="field"><label for="to-user">ID de cuenta destino</label><input id="to-user" name="to_user_id" value="2" autocomplete="off"></div>
                 <div class="field"><label for="transfer-amount">Importe</label><input id="transfer-amount" name="amount" value="25.00" inputmode="decimal" autocomplete="off"></div>
@@ -317,8 +331,65 @@
     const $ = (id) => document.getElementById(id);
     let mode = 'desconocido';
     let activeUserId = 1;
+    let sessionUserId = null;
     let loggedIn = false;
     let toastTimer;
+
+    // Usuarios sembrados en app_vulnerable.js y app_segura.js (mismos IDs en ambos modos)
+    const CONTACTS = [
+      { id: 2, name: 'bob' },
+      { id: 3, name: 'admin' },
+    ];
+
+    function syncContactSelection() {
+      const current = $('to-user').value.trim();
+      document.querySelectorAll('.contact').forEach((button) => {
+        const selected = button.dataset.id === current;
+        button.classList.toggle('selected', selected);
+        button.setAttribute('aria-pressed', String(selected));
+      });
+    }
+
+    function renderContacts() {
+      const list = $('contact-list');
+      list.replaceChildren();
+      const visible = CONTACTS.filter((contact) => contact.id !== sessionUserId);
+      visible.forEach((contact) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'contact';
+        button.dataset.id = String(contact.id);
+        button.setAttribute('aria-pressed', 'false');
+        button.setAttribute('aria-label', `${contact.name}, ID ${contact.id}`);
+
+        const avatar = document.createElement('span');
+        avatar.className = 'contact-avatar';
+        avatar.textContent = contact.name.slice(0, 2).toUpperCase();
+
+        const text = document.createElement('span');
+        const name = document.createElement('span');
+        name.className = 'contact-name';
+        name.textContent = contact.name;
+        const id = document.createElement('span');
+        id.className = 'contact-id';
+        id.textContent = `ID ${contact.id}`;
+        text.append(name, id);
+
+        button.append(avatar, text);
+        button.addEventListener('click', () => {
+          $('to-user').value = contact.id;
+          syncContactSelection();
+          $('transfer-amount').focus();
+        });
+        list.append(button);
+      });
+      if (visible.length && $('to-user').value.trim() === String(sessionUserId)) {
+        $('to-user').value = visible[0].id;
+      }
+      syncContactSelection();
+    }
+
+    $('to-user').addEventListener('input', syncContactSelection);
 
     function showToast(message) {
       const toast = $('toast');
@@ -445,6 +516,8 @@
       try {
         const result = await api('/__mode/toggle', { method: 'POST' });
         loggedIn = false;
+        sessionUserId = null;
+        renderContacts();
         updateMode(result.mode);
         await loadInitialState();
         showToast(`API cambiada a modo ${result.mode}`);
@@ -476,6 +549,8 @@
       if (result) {
         loggedIn = true;
         activeUserId = Number(result.user_id || 1);
+        sessionUserId = activeUserId;
+        renderContacts();
         await runRequest('account-output', () => loadAccount(activeUserId));
       }
     });
@@ -562,6 +637,7 @@
 
     $('logs-button').addEventListener('click', () => runRequest('login-output', () => api('/api/admin/logs')));
     $('mode-details').addEventListener('click', () => runRequest('mode-output', () => api('/api/health')));
+    renderContacts();
     loadInitialState();
   </script>
 </body>
