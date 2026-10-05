@@ -1,5 +1,5 @@
 /**
- * Lanzador FinFlow: sirve la versión vulnerable o la segura en el mismo puerto
+ * Lanzador FinTech: sirve la versión vulnerable o la segura en el mismo puerto
  * y permite alternar entre ambas en caliente (toggle) desde /__panel.
  *
  * El panel y el toggle solo aceptan conexiones locales (la máquina del servidor),
@@ -16,14 +16,14 @@ let mode = process.env.MODE === 'seguro' ? 'seguro' : 'vulnerable';
 const root = express();
 
 const PANEL = `<!doctype html><html lang="es"><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1"><title>FinFlow — Modo</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>FinTech — Modo</title>
 <style>
 body{font-family:system-ui,sans-serif;display:grid;place-items:center;min-height:100vh;margin:0;background:#111;color:#eee}
 .card{text-align:center;padding:2rem 3rem;border-radius:16px;background:#1c1c1c}
 #estado{font-size:2rem;font-weight:700;margin:.5rem 0 1.5rem}
 button{font-size:1.1rem;padding:.8rem 1.6rem;border:0;border-radius:10px;cursor:pointer;font-weight:600}
 </style>
-<div class="card"><div>Modo actual de FinFlow API</div><div id="estado">…</div>
+<div class="card"><div>Modo actual de FinTech API</div><div id="estado">…</div>
 <button id="btn">Cambiar modo</button></div>
 <script>
 const estado=document.getElementById('estado'),btn=document.getElementById('btn');
@@ -57,6 +57,6 @@ root.use((req, res, next) => apps[mode](req, res, next));
 
 const PORT = process.env.PORT || 3000;
 root.listen(PORT, '0.0.0.0', () => {
-  console.log(`FinFlow API en http://0.0.0.0:${PORT} — modo inicial: ${mode.toUpperCase()}`);
-  console.log(`Panel de cambio de modo (solo local): http://localhost:${PORT}/__panel`);
+  console.log(`FinTech API en http://0.0.0.0:${PORT} — modo inicial: ${mode.toUpperCase()}`);
+  console.log(`Panel de cambio de modo (solo local): http://localhost:${PORT}/`);
 });

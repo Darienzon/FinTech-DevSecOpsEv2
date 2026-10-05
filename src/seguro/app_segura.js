@@ -1,5 +1,5 @@
 /**
- * FinFlow API — VERSIÓN SEGURA (Fase 2)
+ * FinTech API — VERSIÓN SEGURA (Fase 2)
  * Zero Trust Input: toda entrada se valida en el servidor con listas blancas y regex.
  */
 const express = require('express');
@@ -59,9 +59,9 @@ CREATE TABLE IF NOT EXISTS receipts(name TEXT PRIMARY KEY, user_id INTEGER, ts I
 `);
 if (!db.prepare('SELECT COUNT(*) c FROM users').get().c) {
   const u = db.prepare('INSERT INTO users(username,password_hash,role,balance,email) VALUES(?,?,?,?,?)');
-  u.run('alice', hashPassword('alice123'), 'user', 1000, 'alice@finflow.test');
-  u.run('bob', hashPassword('bob123'), 'user', 500, 'bob@finflow.test');
-  u.run('admin', hashPassword('admin123'), 'admin', 0, 'admin@finflow.test');
+  u.run('alice', hashPassword('alice123'), 'user', 1000, 'alice@fintech.test');
+  u.run('bob', hashPassword('bob123'), 'user', 500, 'bob@fintech.test');
+  u.run('admin', hashPassword('admin123'), 'admin', 0, 'admin@fintech.test');
   const t = db.prepare('INSERT INTO tx(from_id,to_id,amount,date,note,ts) VALUES(?,?,?,?,?,?)');
   t.run(1, 2, 50, '2026-09-01', 'Pago almuerzo', 0);
   t.run(2, 1, 20, '2026-09-02', 'Devolución', 0);
@@ -309,5 +309,5 @@ app.use((err, req, res, next) => {
 module.exports = app;
 if (require.main === module) {
   const PORT = process.env.PORT || 3001;
-  app.listen(PORT, () => console.log(`[SEGURA] FinFlow en http://0.0.0.0:${PORT}`));
+  app.listen(PORT, () => console.log(`[SEGURA] FinTech en http://0.0.0.0:${PORT}`));
 }

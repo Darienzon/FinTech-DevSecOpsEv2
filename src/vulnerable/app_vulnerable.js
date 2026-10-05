@@ -18,8 +18,8 @@ fs.mkdirSync(UPLOADS, { recursive: true });
 // [A05] Credenciales de BD en claro y luego filtradas por el errorHandler
 const DB_CONFIG = {
   file: path.join(ROOT, 'data', 'vulnerable.db'),
-  user: 'finflow_admin',
-  password: 'Fin#Flow2024!',
+  user: 'fintech_admin',
+  password: 'Fin#Tech2024!',
 };
 
 const db = new Database(DB_CONFIG.file);
@@ -35,9 +35,9 @@ CREATE TABLE IF NOT EXISTS tx(
 `);
 if (!db.prepare('SELECT COUNT(*) c FROM users').get().c) {
   const u = db.prepare('INSERT INTO users(username,password,token,role,balance,email) VALUES(?,?,?,?,?,?)');
-  u.run('alice', 'alice123', '1234', 'user', 1000, 'alice@finflow.test'); // [A07] token "1234"
-  u.run('bob', 'bob123', '5678', 'user', 500, 'bob@finflow.test');
-  u.run('admin', 'admin123', '0001', 'admin', 0, 'admin@finflow.test');
+  u.run('alice', 'alice123', '1234', 'user', 1000, 'alice@fintech.test'); // [A07] token "1234"
+  u.run('bob', 'bob123', '5678', 'user', 500, 'bob@fintech.test');
+  u.run('admin', 'admin123', '0001', 'admin', 0, 'admin@fintech.test');
   const t = db.prepare('INSERT INTO tx(from_id,to_id,amount,date,note) VALUES(?,?,?,?,?)');
   t.run(1, 2, 50, '2026-09-01', 'Pago almuerzo');
   t.run(2, 1, 20, '2026-09-02', 'Devolución');
@@ -144,5 +144,5 @@ app.use(errorHandler);
 module.exports = app;
 if (require.main === module) {
   const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => console.log(`[VULNERABLE] FinFlow en http://0.0.0.0:${PORT}`));
+  app.listen(PORT, () => console.log(`[VULNERABLE] FinTech en http://0.0.0.0:${PORT}`));
 }

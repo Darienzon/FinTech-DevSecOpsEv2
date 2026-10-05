@@ -2,7 +2,7 @@
   "name": "FinTech",
   "version": "1.0.0",
   "private": true,
-  "description": "FinFlow API - Evaluación 02 DevSecOps (ISO/IEC 27034 + OWASP Top 10)",
+  "description": "FinTech API - Evaluación 02 DevSecOps (ISO/IEC 27034 + OWASP Top 10)",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
@@ -20,5 +20,8 @@
     "moment": "^2.31.0",
     "moment-old": "npm:moment@2.29.1",
     "multer": "^2.0.0"
+  },
+  "allowScripts": {
+    "better-sqlite3@12.11.1": true
   }
 }
