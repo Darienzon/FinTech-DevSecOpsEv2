@@ -9,9 +9,11 @@ const multer = require('multer');
 const moment = require('moment-old'); // [A06] moment 2.29.1 (< 2.29.2, vulnerable)
 const fs = require('fs');
 const path = require('path');
+const createAuditReportMiddleware = require('../audit-report');
 
 const ROOT = path.join(__dirname, '..', '..');
 const UPLOADS = path.join(ROOT, 'uploads', 'vulnerable');
+const auditReport = path.join(ROOT, 'auditoria', 'fase_1_vulnerable', 'reporte_auditoria.md');
 fs.mkdirSync(path.join(ROOT, 'data'), { recursive: true });
 fs.mkdirSync(UPLOADS, { recursive: true });
 
@@ -45,6 +47,7 @@ if (!db.prepare('SELECT COUNT(*) c FROM users').get().c) {
 }
 
 const app = express();
+app.use(createAuditReportMiddleware(auditReport, 'vulnerable'));
 app.use(express.json());
 
 // [A09] Sin ningún tipo de logging: ni accesos fallidos ni transferencias anómalas.

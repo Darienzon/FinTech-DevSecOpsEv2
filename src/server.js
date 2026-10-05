@@ -9,11 +9,23 @@ const express = require('express');
 const path = require('path');
 const vulnerable = require('./vulnerable/app_vulnerable');
 const segura = require('./seguro/app_segura');
+const createAuditReportMiddleware = require('./audit-report');
 
 const apps = { vulnerable, seguro: segura };
 let mode = process.env.MODE === 'seguro' ? 'seguro' : 'vulnerable';
+const auditReports = {
+  vulnerable: createAuditReportMiddleware(
+    path.join(__dirname, '..', 'auditoria', 'fase_1_vulnerable', 'reporte_auditoria.md'),
+    'vulnerable'
+  ),
+  seguro: createAuditReportMiddleware(
+    path.join(__dirname, '..', 'auditoria', 'fase_2_seguro', 'reporte_auditoria_fase_2.md'),
+    'seguro'
+  ),
+};
 
 const root = express();
+root.use((req, res, next) => auditReports[mode](req, res, next));
 
 const PANEL = `<!doctype html><html lang="es"><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>FinTech — Modo</title>
@@ -56,7 +68,8 @@ root.get('/', (req, res) => {
 root.use((req, res, next) => apps[mode](req, res, next));
 
 const PORT = process.env.PORT || 3000;
-root.listen(PORT, '0.0.0.0', () => {
-  console.log(`FinTech API en http://0.0.0.0:${PORT} — modo inicial: ${mode.toUpperCase()}`);
+const HOST = process.env.HOST || '0.0.0.0';
+root.listen(PORT, HOST, () => {
+  console.log(`FinTech API en http://${HOST}:${PORT} — modo inicial: ${mode.toUpperCase()}`);
   console.log(`Panel de cambio de modo (solo local): http://localhost:${PORT}/`);
 });
