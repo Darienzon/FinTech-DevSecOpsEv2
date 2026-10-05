@@ -13,13 +13,15 @@ const createAuditReportMiddleware = require('./audit-report');
 
 const apps = { vulnerable, seguro: segura };
 let mode = process.env.MODE === 'seguro' ? 'seguro' : 'vulnerable';
+
+// Rutas actualizadas alineadas con la pauta (fase1 / fase2)
 const auditReports = {
   vulnerable: createAuditReportMiddleware(
-    path.join(__dirname, '..', 'auditoria', 'fase_1_vulnerable', 'reporte_auditoria.md'),
+    path.join(__dirname, '..', 'auditoria', 'fase1', 'reporte_auditoria.md'),
     'vulnerable'
   ),
   seguro: createAuditReportMiddleware(
-    path.join(__dirname, '..', 'auditoria', 'fase_2_seguro', 'reporte_auditoria_fase_2.md'),
+    path.join(__dirname, '..', 'auditoria', 'fase2', 'reporte_auditoria_fase_2.md'),
     'seguro'
   ),
 };
@@ -71,5 +73,5 @@ const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
 root.listen(PORT, HOST, () => {
   console.log(`FinTech API en http://${HOST}:${PORT} — modo inicial: ${mode.toUpperCase()}`);
-  console.log(`Panel de cambio de modo (solo local): http://localhost:${PORT}/`);
+  console.log(`Panel de cambio de modo (solo local): http://localhost:${PORT}/__panel`);
 });

@@ -18,3 +18,17 @@ Las peticiones HTTP recibidas por la aplicación en modo vulnerable se agregan a
 | 2026-10-05T04:20:20.865Z | GET | `/api/accounts/2` | 200 |
 | 2026-10-05T04:20:20.883Z | POST | `/api/login` | 200 |
 | 2026-10-05T04:20:20.886Z | GET | `/api/transactions/search` | 200 |
+| 2026-10-05T16:49:04.435Z | GET | `/` | 200 |
+| 2026-10-05T16:49:04.476Z | GET | `/api/health` | 200 |
+| 2026-10-05T16:49:04.942Z | GET | `/api/accounts/1` | 200 |
+| 2026-10-05T16:49:04.945Z | GET | `/favicon.ico` | 404 |
+| 2026-10-05T16:49:06.783Z | POST | `/__mode/toggle` | 200 |
+| 2026-10-05T16:49:07.461Z | GET | `/api/health` | 200 |
+| 2026-10-05T16:49:07.467Z | GET | `/api/accounts/1` | 304 |
+| 2026-10-05T16:49:07.852Z | POST | `/__mode/toggle` | 200 |
+| 2026-10-05T16:49:39.491Z | GET | `/api/health` | 200 |
+| 2026-10-05T16:49:39.496Z | GET | `/api/accounts/1` | 304 |
+| 2026-10-05T16:49:40.193Z | POST | `/__mode/toggle` | 200 |
+| 2026-10-05T16:49:42.534Z | GET | `/api/health` | 200 |
+| 2026-10-05T16:49:42.546Z | GET | `/api/accounts/1` | 304 |
+| 2026-10-05T16:49:44.872Z | POST | `/__mode/toggle` | 200 |

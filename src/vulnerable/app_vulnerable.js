@@ -13,7 +13,8 @@ const createAuditReportMiddleware = require('../audit-report');
 
 const ROOT = path.join(__dirname, '..', '..');
 const UPLOADS = path.join(ROOT, 'uploads', 'vulnerable');
-const auditReport = path.join(ROOT, 'auditoria', 'fase_1_vulnerable', 'reporte_auditoria.md');
+// Ruta corregida según pauta:
+const auditReport = path.join(ROOT, 'auditoria', 'fase1', 'reporte_auditoria.md');
 fs.mkdirSync(path.join(ROOT, 'data'), { recursive: true });
 fs.mkdirSync(UPLOADS, { recursive: true });
 
