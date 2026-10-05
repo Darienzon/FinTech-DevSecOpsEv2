@@ -1,1 +1,2 @@
-Aca la base, ejecuta vulnerabilidades y crea .sh para automatizacion, cualquier cosita avisas 
+Aca la base, ejecuta vulnerabilidades y crea .sh para automatizacion, cualquier cosita avisas
+holi :D mb 

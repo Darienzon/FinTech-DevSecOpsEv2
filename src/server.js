@@ -6,6 +6,7 @@
  * así la máquina auditora no puede cambiar el modo. ALLOW_REMOTE_TOGGLE=1 lo permite.
  */
 const express = require('express');
+const path = require('path');
 const vulnerable = require('./vulnerable/app_vulnerable');
 const segura = require('./seguro/app_segura');
 
@@ -45,6 +46,10 @@ root.post('/__mode/:target', localOnly, (req, res) => {
   mode = t === 'toggle' ? (mode === 'vulnerable' ? 'seguro' : 'vulnerable') : (apps[t] ? t : mode);
   console.log(`>>> MODO CAMBIADO A: ${mode.toUpperCase()}`);
   res.json({ mode });
+});
+
+root.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Todo lo demás lo atiende la app del modo activo
